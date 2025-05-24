@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Categories - RePharma</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #e0f7fa, #edf6f9);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #005f73;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+
+    .categories-section {
+      padding: 2rem;
+      flex-grow: 1;
+    }
+
+    .categories-section h2 {
+      text-align: center;
+      color: #023047;
+      margin-bottom: 2rem;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .category-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+      color: #028090;
+    }
+
+    .category-card h3 {
+      margin: 0;
+      color: #005f73;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      padding: 1rem;
+      background: #005f73;
+      color: white;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">RePharma 🤝</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="donor.html">Donor</a></li>
+        <li><a href="receiver.html">Receiver</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="availablemedicines.html">Available Medicines</a></li>
+        <li><a href="categories.html">Categories</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="categories-section">
+    <h2>Medicine Categories</h2>
+    <div class="category-grid">
+      <div class="category-card"><div class="category-icon">💊</div><h3>Antibiotics</h3></div>
+      <div class="category-card"><div class="category-icon">🩺</div><h3>Cold & Flu</h3></div>
+      <div class="category-card"><div class="category-icon">🧠</div><h3>Mental Health</h3></div>
+      <div class="category-card"><div class="category-icon">🩹</div><h3>Pain Relief</h3></div>
+      <div class="category-card"><div class="category-icon">🧬</div><h3>Vitamins</h3></div>
+      <div class="category-card"><div class="category-icon">💉</div><h3>Insulin</h3></div>
+      <div class="category-card"><div class="category-icon">🫀</div><h3>Heart Health</h3></div>
+      <div class="category-card"><div class="category-icon">🧴</div><h3>Skin Care</h3></div>
+      <div class="category-card"><div class="category-icon">🧪</div><h3>Allergy Relief</h3></div>
+      <div class="category-card"><div class="category-icon">🦴</div><h3>Bone Health</h3></div>
+      <div class="category-card"><div class="category-icon">👶</div><h3>Baby Care</h3></div>
+      <div class="category-card"><div class="category-icon">🦷</div><h3>Dental Care</h3></div>
+      <div class="category-card"><div class="category-icon">🩸</div><h3>Diabetes Care</h3></div>
+    </div>
+  </section>
+
+  <footer>&copy; 2025 RePharma</footer>
+
+</body>
+</html>

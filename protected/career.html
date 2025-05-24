@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Career - RePharma</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+    }
+
+    header {
+      background-color: #005f73;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+
+    .career-section {
+      padding: 2rem;
+      flex-grow: 1;
+    }
+
+    .career-section h2 {
+      text-align: center;
+      color: #005f73;
+      margin-bottom: 1.5rem;
+    }
+
+    .vacancy-card {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      margin: 1rem auto;
+      padding: 2rem;
+      max-width: 700px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .vacancy-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .vacancy-card h3 {
+      color: #005f73;
+      margin-bottom: 1rem;
+    }
+
+    .vacancy-card p {
+      color: #333;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .vacancy-card button {
+      padding: 0.8rem 1.5rem;
+      background-color: #028090;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .vacancy-card button:hover {
+      background-color: #0a9396;
+    }
+
+    footer {
+      padding: 1rem;
+      background: #005f73;
+      color: white;
+      text-align: center;
+    }
+
+    .button:hover{
+      background-color: #ffd166;
+      color: #000000;
+      box-shadow: 0 0 10px #ffd166;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <header>
+    <div class="logo">RePharma 🤝</div>
+    <nav>
+      <ul class="nav-links">
+       <li><a href="index.html">Home</a></li>
+        <li><a href="donor.html">Donor</a></li>
+        <li><a href="receiver.html">Receiver</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="availablemedicines.html">Available Medicines</a></li>
+        <li><a href="categories.html">Categories</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="career-section">
+    <h2>Current Job Vacancies</h2>
+
+    <div class="vacancy-card">
+      <h3>Quality Assurance Team</h3>
+      <p>We are looking for a passionate and detail-oriented Quality Assurance (QA) team member...</p>
+      <button class="button">Apply Now</button>
+    </div>
+
+    <div class="vacancy-card">
+      <h3>Developer</h3>
+      <p>We are seeking an innovative and skilled Developer to join our team...</p>
+      <button  class="button">Apply Now</button>
+    </div>
+
+    <div class="vacancy-card">
+      <h3>Delivery Person</h3>
+      <p>As a Delivery Person at RePharma, you will be responsible for timely deliveries...</p>
+      <button  class="button">Apply Now</button>
+    </div>
+
+    <div class="vacancy-card">
+      <h3>Marketing Specialist</h3>
+      <p>We are looking for a creative and strategic Marketing Specialist who can help us...</p>
+      <button  class="button">Apply Now</button>
+    </div>
+  </section>
+
+  <footer>&copy; 2025 RePharma</footer>
+
+  <script>
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+    let bubbles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    class Bubble {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 100;
+        this.radius = Math.random() * 6 + 4;
+        this.speed = Math.random() * 1 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.3;
+      }
+      update() {
+        this.y -= this.speed;
+        if (this.y < -this.radius) {
+          this.y = canvas.height + this.radius;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 95, 115, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    function createBubbles(count) {
+      for (let i = 0; i < count; i++) {
+        bubbles.push(new Bubble());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bubbles.forEach((b) => {
+        b.update();
+        b.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    createBubbles(60);
+    animate();
+  </script>
+</body>
+</html>

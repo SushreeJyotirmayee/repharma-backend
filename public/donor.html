@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donor - RE-Pharma</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f7f9fc;
+      color: #333;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    header {
+      background-color: #005f73;
+      padding: 1rem 2rem;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+
+    .donor-form-container {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .donor-form-container h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #005f73;
+    }
+
+    .donor-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .donor-form select,
+    .donor-form input[type="text"],
+    .donor-form input[type="file"] {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .donor-form button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #0a9396;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .donor-form button:hover {
+      background-color: #007f7f;
+    }
+
+    #image-preview {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    #preview-img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status-message {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    .footer {
+      background-color: #005f73;
+      color: #ffffff;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .footer a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header & Nav -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+         RePharma 🤝
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="donor.html">Donor</a></li>
+        <li><a href="receiver.html">Receiver</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="availablemedicines.html">Available Medicines</a></li>
+        <li><a href="categories.html">Categories</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="donor-form-container">
+      <h2>Donate Your Medicine</h2>
+      <form class="donor-form" id="donorForm" enctype="multipart/form-data">
+        <!-- Category -->
+        <label for="category">Select Medicine Category:</label>
+        <select id="category" name="category" required>
+          <option value="">-- Select Category --</option>
+          <option value="tablet">Tablet</option>
+          <option value="syrup">Syrup</option>
+          <option value="ointment">Ointment</option>
+          <option value="injection">Injection</option>
+          <option value="others">Others</option>
+        </select>
+
+        <!-- Price -->
+        <label for="price">Set a Price (leave blank for free):</label>
+        <input type="text" id="price" name="price" placeholder="e.g., ₹50 or leave empty to donate for free">
+
+        <!-- Upload Image -->
+        <label for="medicine-image">Upload Medicine Image:</label>
+        <input type="file" id="medicine-image" name="medicineImage" accept="image/*" required>
+
+        <!-- Image Preview -->
+        <div id="image-preview">
+          <img id="preview-img" src="" alt="Image Preview" />
+        </div>
+
+        <!-- Submit -->
+        <button type="submit">Donate Now</button>
+
+        <!-- Status message -->
+        <p class="status-message" id="statusMessage"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 RE-Pharma. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
+  </footer>
+
+  <!-- Image Preview Script -->
+  <script>
+    const imageInput = document.getElementById('medicine-image');
+    const previewImg = document.getElementById('preview-img');
+    const form = document.getElementById('donorForm');
+    const statusMessage = document.getElementById('statusMessage');
+
+    // Image preview on file select
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImg.setAttribute('src', e.target.result);
+          previewImg.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      } else {
+        previewImg.style.display = 'none';
+        previewImg.setAttribute('src', '');
+      }
+    });
+
+    // Form submit with fetch API
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      statusMessage.textContent = '';
+      statusMessage.style.color = '';
+
+      const formData = new FormData();
+
+      const category = form.category.value;
+      let price = form.price.value.trim();
+
+      // Default price to 0 if empty or invalid
+      if (!price || isNaN(price)) {
+        price = '0';
+      }
+
+      const imageFile = imageInput.files[0];
+      if (!imageFile) {
+        statusMessage.style.color = 'red';
+        statusMessage.textContent = 'Please upload an image of the medicine.';
+        return;
+      }
+
+      formData.append('category', category);
+      formData.append('price', price);
+      formData.append('medicineImage', imageFile);
+
+      try {
+        const response = await fetch('/api/donor/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          statusMessage.style.color = 'green';
+          statusMessage.textContent = 'Thank you! Your medicine has been donated successfully.';
+          form.reset();
+          previewImg.style.display = 'none';
+          previewImg.setAttribute('src', '');
+        } else {
+          const errorData = await response.json();
+          statusMessage.style.color = 'red';
+          statusMessage.textContent = errorData.message || 'Failed to donate medicine. Please try again.';
+        }
+      } catch (error) {
+        statusMessage.style.color = 'red';
+        statusMessage.textContent = 'An error occurred: ' + error.message;
+      }
+    });
+  </script>
+
+</body>
+</html>

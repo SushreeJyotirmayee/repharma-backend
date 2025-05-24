@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Re-Pharma | Healing Together</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    #logoutSection {
+      margin-top: 40px;
+      text-align: center;
+    }
+    #logoutButton {
+      padding: 10px 25px;
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">💊 Re-Pharma | Healing together</div>
+      <ul class="nav-links">
+        <li><a href="#" id="donorLink">Donor</a></li>
+        <li><a href="#" id="receiverLink">Receiver</a></li>
+        <li><a href="#" id="careerLink">Career</a></li>
+        <li><a href="#" id="availableLink">Available Medicines</a></li>
+        <li><a href="#" id="categoriesLink">Categories</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="form-section">
+        <div class="logo">
+          <h2 class="color-shifting-text">Join Re-Pharma 🤝</h2>
+        </div>
+
+        <form id="userForm">
+          <div id="nameField">
+            <input type="text" id="name" placeholder="Full Name" />
+          </div>
+
+          <input type="email" id="email" placeholder="Email Address" required />
+          <input type="tel" id="phone" placeholder="Phone Number" required />
+
+          <div id="roleField">
+            <select id="role">
+              <option value="" disabled selected>Choose Role</option>
+              <option value="donor">Donor</option>
+              <option value="receiver">Receiver</option>
+            </select>
+          </div>
+
+          <input type="password" id="password" placeholder="Password" required />
+
+          <div class="form-buttons">
+            <button type="button" onclick="showRegister()">Register</button>
+            <button type="button" onclick="showLogin()">Login</button>
+            <button type="submit" id="submitBtn" style="display: none;">Submit</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Re-Pharma. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    let formMode = "";
+
+    function showRegister() {
+      formMode = "register";
+      document.getElementById("nameField").style.display = "block";
+      document.getElementById("roleField").style.display = "block";
+      document.getElementById("submitBtn").style.display = "inline-block";
+    }
+
+    function showLogin() {
+      formMode = "login";
+      document.getElementById("nameField").style.display = "none";
+      document.getElementById("roleField").style.display = "none";
+      document.getElementById("submitBtn").style.display = "inline-block";
+    }
+
+    document.getElementById("userForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        role: document.getElementById("role").value,
+        password: document.getElementById("password").value
+      };
+
+      const url = formMode === "register"
+        ? "http://localhost:5000/register"
+        : "http://localhost:5000/login";
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        if (msg.toLowerCase().includes("success")) {
+          window.location.reload();
+        }
+      })
+      .catch(err => alert("Error: " + err.message));
+    });
+
+    // function handleLogout() {
+    //   fetch('/logout', {
+    //     method: 'GET',
+    //     credentials: 'include'
+    //   })
+    //   .then(() => {
+    //     alert("Logged out successfully.");
+    //     window.location.href = '/index.html';
+    //   })
+    //   .catch(() => {
+    //     alert("Error during logout.");
+    //   });
+    // }
+
+    window.onload = () => {
+      document.getElementById("nameField").style.display = "none";
+      document.getElementById("roleField").style.display = "none";
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('redirected')) {
+        alert("Please login or register to access the page.");
+      }
+
+      // Check session and toggle logout visibility
+      fetch('/check-session', { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.loggedIn) {
+            document.getElementById("logoutSection").style.display = "block";
+          }
+        });
+    };
+  </script>
+
+  <!-- Navigation link handlers -->
+  <script>
+    function checkAuthAndRedirect(path) {
+      fetch(path, {
+        method: 'GET',
+        credentials: 'include'
+      })
+      .then(res => {
+        if (res.redirected) {
+          alert("Please login or register to access this page.");
+          window.location.href = "/index.html?redirected=true";
+        } else {
+          window.location.href = path;
+        }
+      })
+      .catch(() => {
+        alert("Error checking access.");
+      });
+    }
+
+    document.getElementById("donorLink").onclick = () => checkAuthAndRedirect("/donor.html");
+    document.getElementById("receiverLink").onclick = () => checkAuthAndRedirect("/receiver.html");
+    document.getElementById("careerLink").onclick = () => checkAuthAndRedirect("/career.html");
+    document.getElementById("availableLink").onclick = () => checkAuthAndRedirect("/availablemedicines.html");
+    document.getElementById("categoriesLink").onclick = () => checkAuthAndRedirect("/categories.html");
+  </script>
+</body>
+</html>

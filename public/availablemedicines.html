@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Available Medicines - RePharma</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #e0f7fa, #edf6f9);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #005f73;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .medicine-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .medicine-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .medicine-card img {
+      max-width: 100%;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .medicine-info {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .medicine-info h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+      color: #005f73;
+    }
+
+    .medicine-info p {
+      margin: 0.3rem 0;
+      font-size: 1rem;
+    }
+
+    .footer {
+      background-color: #005f73;
+      color: white;
+      text-align: center;
+      padding: 1rem 2rem;
+    }
+
+    .footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #333;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header>
+    <div class="logo">RePharma 💊</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="donor.html">Donor</a></li>
+      <li><a href="receiver.html">Receiver</a></li>
+      <li><a href="career.html">Career</a></li>
+      <li><a href="availablemedicines.html">Available Medicines</a></li>
+      <li><a href="categories.html">Categories</a></li>
+    </ul>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <h2 style="text-align: center; color: #005f73;">Available Donated Medicines</h2>
+    <div id="medicineList" class="medicine-list"></div>
+    <p id="noMedicines" class="message" style="display: none;">No medicines available at the moment.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 RE-Pharma. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
+  </footer>
+
+  <!-- Script to Fetch Medicines -->
+  <script>
+    async function fetchMedicines() {
+      try {
+       const response = await fetch('/api/donor/available');
+        if (!response.ok) throw new Error('Failed to fetch medicines');
+
+        const medicines = await response.json();
+        const medicineList = document.getElementById('medicineList');
+        const noMedicines = document.getElementById('noMedicines');
+
+        if (medicines.length === 0) {
+          noMedicines.style.display = 'block';
+          return;
+        }
+
+        medicines.forEach(med => {
+          const card = document.createElement('div');
+          card.className = 'medicine-card';
+
+          const img = document.createElement('img');
+          img.src = `/uploads/${med.image}`;
+          img.onerror = () => {
+           card.remove();
+            };
+          img.alt = `${med.category} image`;
+
+          const info = document.createElement('div');
+          info.className = 'medicine-info';
+          info.innerHTML = `
+            <h3>${med.category}</h3>
+            <p><strong>Price:</strong> ₹${med.price === '0' ? 'Free' : med.price}</p>
+          `;
+
+          card.appendChild(img);
+          card.appendChild(info);
+          medicineList.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('noMedicines').textContent = 'Error loading medicines.';
+        document.getElementById('noMedicines').style.display = 'block';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', fetchMedicines);
+  </script>
+
+</body>
+</html>

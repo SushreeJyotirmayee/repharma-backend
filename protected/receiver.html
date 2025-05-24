@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receiver - RePharma</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Same as previous CSS styles */
+    html, body {
+  height: 100%;  /* Ensure body takes up full height */
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background-color: #f0f4f8;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;  /* Ensure body takes at least the full height */
+}
+
+.receiver-section {
+  flex-grow: 1;  /* Make the content section grow to take up available space */
+}
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f0f4f8;
+    }
+
+    header {
+      background-color: #005f73;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+    }
+
+    .receiver-section {
+      padding: 2rem;
+    }
+
+    .receiver-section h2 {
+      margin-bottom: 1rem;
+      color: #005f73;
+    }
+
+    .category-select {
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      padding: 0.6rem;
+      border-radius: 5px;
+    }
+
+    .medicine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .medicine-card {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .medicine-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .medicine-card h4 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+
+    .medicine-card p {
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .medicine-card button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 0.3rem;
+    }
+
+    .buy-btn {
+      background-color: #028090;
+      color: white;
+    }
+
+    .cart-btn {
+      background-color: #f4a261;
+      color: white;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #005f73;
+      color: white;
+      text-align: center;
+    }
+
+    /* General Navigation Styles */
+/* General Navigation Styles */
+.navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links li a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">RePharma 🤝</div>
+    <nav>
+       <ul class="nav-links">
+       <li><a href="index.html">Home</a></li>
+        <li><a href="donor.html">Donor</a></li>
+        <li><a href="receiver.html">Receiver</a></li>
+        <li><a href="career.html">Career</a></li>
+        <li><a href="availablemedicines.html">Available Medicines</a></li>
+        <li><a href="categories.html">Categories</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="receiver-section">
+    <h2>Select Medicine Category</h2>
+    <select class="category-select" id="category-select">
+      <option value="">-- Select a category --</option>
+      <option value="fever">Fever</option>
+      <option value="cold">Cold & Flu</option>
+      <option value="pain">Pain Relief</option>
+      <option value="diabetes">Diabetes</option>
+      <option value="other">Other</option>
+    </select>
+
+    <div class="medicine-grid" id="medicine-grid">
+      <!-- Placeholder for medicines -->
+      <div class="medicine-card" data-category="fever">
+        <img src="images/medicine1.jpg" alt="Medicine Image">
+        <h4>Paracetamol</h4>
+        <p>Price: ₹10</p>
+        <button class="buy-btn">Buy Now</button>
+        <button class="cart-btn">Add to Cart</button>
+      </div>
+
+      <div class="medicine-card" data-category="cold">
+        <img src="images/medicine2.jpg" alt="Medicine Image">
+        <h4>Cold Relief</h4>
+        <p>Price: ₹0 (Free)</p>
+        <button class="buy-btn">Buy Now</button>
+        <button class="cart-btn">Add to Cart</button>
+      </div>
+
+      <div class="medicine-card" data-category="pain">
+        <img src="images/medicine3.jpg" alt="Medicine Image">
+        <h4>Pain Killer</h4>
+        <p>Price: ₹20</p>
+        <button class="buy-btn">Buy Now</button>
+        <button class="cart-btn">Add to Cart</button>
+      </div>
+
+      <div class="medicine-card" data-category="diabetes">
+        <img src="images/medicine4.jpg" alt="Medicine Image">
+        <h4>Insulin</h4>
+        <p>Price: ₹500</p>
+        <button class="buy-btn">Buy Now</button>
+        <button class="cart-btn">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 RePharma | All rights reserved.
+  </footer>
+
+  <script>
+    // JavaScript for category filtering
+    document.getElementById('category-select').addEventListener('change', function() {
+      const selectedCategory = this.value;
+      const medicineCards = document.querySelectorAll('.medicine-card');
+
+      medicineCards.forEach(card => {
+        if (selectedCategory === "" || card.dataset.category === selectedCategory) {
+          card.style.display = "block"; // Show card
+        } else {
+          card.style.display = "none"; // Hide card
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
