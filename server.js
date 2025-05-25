@@ -1,7 +1,6 @@
 console.log('Starting server...');
 
 const express = require('express');
-const mysql = require('mysql');
 const cors = require('cors');
 const session = require('express-session');
 const path = require('path');
@@ -11,13 +10,16 @@ const app = express();
 // ✅ Import donor routes
 const donorRoutes = require('./routes/donor');
 
+// ✅ Import DB from db.js (Railway connection)
+const db = require('./db');
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS setup
+// ✅ CORS setup - allow your Railway frontend URL here
 app.use(cors({
-  origin: 'http://localhost:5500', // <-- change to match your frontend port
+  origin: 'https://repharma-frontend-production.up.railway.app', // <-- replace with your actual frontend URL
   credentials: true
 }));
 
@@ -36,22 +38,6 @@ app.use(session({
     maxAge: 15 * 60 * 1000 // 15 minutes
   }
 }));
-
-// MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '03112001',
-  database: 'repharma'
-});
-
-db.connect(err => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-    return;
-  }
-  console.log('Connected to MySQL database');
-});
 
 // Auth middleware
 function ensureAuthenticated(req, res, next) {
@@ -121,7 +107,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-const port = 5000;
+// ✅ Use Railway-provided port or default to 5000
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`✅ Server running on port ${port}`);
 });
