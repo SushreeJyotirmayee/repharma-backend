@@ -3,10 +3,10 @@ console.log('Starting server...');
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session); // ✅ NEW: MySQL session store
 const path = require('path');
 
 const app = express();
-// Trigger redeploy
 
 // ✅ Import donor routes
 const donorRoutes = require('./routes/donor');
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ✅ CORS setup - allow your Railway frontend URL here
 app.use(cors({
-  origin: 'https://repharma-frontend-production.up.railway.app', // <-- replace with your actual frontend URL
+  origin: 'https://repharma-frontend-production.up.railway.app',
   credentials: true
 }));
 
@@ -30,9 +30,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Session setup
+// ✅ Setup MySQL session store
+const sessionStore = new MySQLStore({}, db); // ✅ Use your MySQL DB for sessions
+
+// ✅ Session setup using MySQLStore
 app.use(session({
+  key: 'repharma_session',
   secret: 'repharma-secret-key',
+  store: sessionStore,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -40,7 +45,7 @@ app.use(session({
   }
 }));
 
-// Auth middleware
+// ✅ Auth middleware
 function ensureAuthenticated(req, res, next) {
   if (req.session && req.session.userId) {
     return next();
@@ -49,17 +54,16 @@ function ensureAuthenticated(req, res, next) {
   }
 }
 
-// Routes
+// ✅ Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Check session route
 app.get('/check-session', (req, res) => {
   res.json({ loggedIn: !!req.session.userId });
 });
 
-// Login
+// ✅ Login Route
 app.post('/login', (req, res) => {
   const { email, phone, password } = req.body;
   const query = `SELECT * FROM users WHERE email = ? AND phone = ? AND password = ?`;
@@ -78,7 +82,7 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Register
+// ✅ Register Route
 app.post('/register', (req, res) => {
   const { name, email, phone, password, role } = req.body;
   const query = `INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)`;
@@ -91,7 +95,7 @@ app.post('/register', (req, res) => {
   });
 });
 
-// Protected pages
+// ✅ Protected Pages Middleware
 const protectedPages = ['donor', 'receiver', 'career', 'availablemedicines', 'categories'];
 protectedPages.forEach(page => {
   app.get(`/${page}.html`, ensureAuthenticated, (req, res) => {
@@ -99,16 +103,16 @@ protectedPages.forEach(page => {
   });
 });
 
-// ✅ Donor API routes
+// ✅ Donor API Routes
 app.use('/api/donor', donorRoutes);
 
-// ✅ Serve uploaded images
+// ✅ Serve Uploaded Images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve static files
+// ✅ Serve Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ Use Railway-provided port or default to 5000
+// ✅ Start the Server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
