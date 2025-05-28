@@ -3,7 +3,7 @@ console.log('Starting server...');
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session); // ✅ NEW: MySQL session store
+const MySQLStore = require('express-mysql-session')(session);
 const path = require('path');
 
 const app = express();
@@ -31,9 +31,8 @@ app.use((req, res, next) => {
 });
 
 // ✅ Setup MySQL session store
-const sessionStore = new MySQLStore({}, db); // ✅ Use your MySQL DB for sessions
+const sessionStore = new MySQLStore({}, db);
 
-// ✅ Session setup using MySQLStore
 app.use(session({
   key: 'repharma_session',
   secret: 'repharma-secret-key',
@@ -54,11 +53,12 @@ function ensureAuthenticated(req, res, next) {
   }
 }
 
-// ✅ Routes
+// ✅ Root Health Check Route for Railway
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.send('🎉 RePharma Backend is running!');
 });
 
+// ✅ Check Session
 app.get('/check-session', (req, res) => {
   res.json({ loggedIn: !!req.session.userId });
 });
