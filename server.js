@@ -117,3 +117,10 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
 });
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection:', reason);
+});
